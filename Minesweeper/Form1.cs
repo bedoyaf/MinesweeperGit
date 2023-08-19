@@ -227,7 +227,6 @@ namespace Minesweeper
             placeBombs();  
             writeDetection(); 
         }
-       
         public Tile FindButton(Button clickedButton) //searches which button was pressed in Board
         {
             for (int i = 0; i < length; i++)
