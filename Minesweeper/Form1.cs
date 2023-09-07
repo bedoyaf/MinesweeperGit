@@ -34,10 +34,10 @@ namespace Minesweeper
             private int detected = 0;
             private (int, int) coordinates;
             private bool flag = false;
-            private bool detectorFinished=false;
+            private bool detectorFinished = false;
             public Button Getbutton()
             {
-                return button; 
+                return button;
             }
             public Items Getcontains()
             {
@@ -51,7 +51,7 @@ namespace Minesweeper
             {
                 return detected;
             }
-            public (int,int) Getcoordinates()
+            public (int, int) Getcoordinates()
             {
                 return coordinates;
             }
@@ -65,28 +65,55 @@ namespace Minesweeper
             }
             public void Setcontains(Items newcontains)
             {
-                contains=newcontains;
+                contains = newcontains;
             }
             public void Setrevealed(bool newrevealed)
             {
-                revealed=newrevealed;
+                revealed = newrevealed;
             }
             public void Setdetected(int newdetected)
             {
-                detected=newdetected;
+                detected = newdetected;
             }
-            public void Setcoordinates((int,int) newcoordinates)
+            public void Setcoordinates((int, int) newcoordinates)
             {
-                coordinates=newcoordinates;
+                coordinates = newcoordinates;
             }
             public void Setflag(bool newflag)
             {
-                flag=newflag;
+                flag = newflag;
             }
             public void SetdetectorFinished(bool newdetectorFinished)
             {
-                detectorFinished=newdetectorFinished;
+                detectorFinished = newdetectorFinished;
             }
+       /*   public int PlaceFlag(int bombs, int placedFlags)
+            {
+                if (flag == true)
+                {
+                    flag = false;
+                    button.BackColor = Color.Gray;
+                    button.Image = null;
+                    placedFlags--;
+                }
+                else
+                {
+                    if (placedFlags < bombs)
+                    {
+                        flag = true;
+                        button.BackColor = Color.White;
+                        Image originalImage = Properties.Resources.flag;
+                        Image resizedImage = originalImage.GetThumbnailImage(button.Width, button.Height, null, IntPtr.Zero);
+                        button.Image = resizedImage;
+                        placedFlags++;
+                    }
+                }
+                if (placedFlags < 0)
+                {
+                    throw new NotImplementedException();
+                }
+                return placedFlags;
+            }*/
         }
         Tile[,] Board;
         int length;
@@ -262,8 +289,13 @@ namespace Minesweeper
                     placedFlags++;
                 }
             }
+         /*   if(placedFlags<0)
+            {
+                throw new NotImplementedException();
+            }*/
             BombsLeftCounter.Text = "Bombs Left: " + (Bombs - placedFlags);
         }
+
         public void revealBoard(int i, int j) //Using BFS it reveals as much of the Board as it can
         {
             Queue<(int, int)> kju = new Queue<(int, int)>();
@@ -361,6 +393,8 @@ namespace Minesweeper
             }
             else
             {
+                /*placedFlags=ourtile.PlaceFlag(Convert.ToInt32(BombNumber.Value),placedFlags);
+                BombsLeftCounter.Text = "Bombs Left: " + (Bombs - placedFlags);*/
                 PlaceFlag(ourtile);
             }
 
@@ -468,6 +502,7 @@ namespace Minesweeper
                         Image originalImage = Properties.Resources.flag_mark;
                         Image resizedImage = originalImage.GetThumbnailImage (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,  Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Height, null, IntPtr.Zero);
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = resizedImage;
+                        Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Setflag(true);
                     }
                 }
             }
