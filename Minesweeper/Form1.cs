@@ -235,9 +235,7 @@ namespace Minesweeper
                     this.Controls.Add(newbutton.Getbutton());
                     Board[i, j] = newbutton;
                     Board[i, j].Setcoordinates((i, j));
-
                 }
-
             }
             BombsLeftCounter.Text = "Bombs Left: " + BombNumber.Value;
             placeBombs();
@@ -311,11 +309,9 @@ namespace Minesweeper
                                 temp = (current.Item1 + dir.Item1, current.Item2 + dir.Item2);
                                 kju.Enqueue(temp);
                             }
-
                         }
                     }
                 }
-
             }
         }
 
