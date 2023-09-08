@@ -87,5 +87,11 @@
     <None Include="Resources\flag.png" />
     <None Include="Resources\bomb.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ClassLibraryMineSweeper\ClassLibraryMineSweeper.csproj">
+      <Project>{312ccb7f-5bc8-4cdc-b82e-8377dc837a29}</Project>
+      <Name>ClassLibraryMineSweeper</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

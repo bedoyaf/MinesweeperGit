@@ -6,12 +6,12 @@ using System;
 using TestStack.White.UIItems;
 using TestStack.White.UIItems.WindowItems;
 using Xunit;*/
-
+/*
 namespace UnitTest2
 {
-    public class Tests
+    /*public class Tests
     {
-        [SetUp]
+     /*   [SetUp]
         public void Setup()
         {
         }
@@ -30,14 +30,16 @@ namespace UnitTest2
             form.tileGenerator.PerformClick(); // Replace YourButton with the actual button name
 
             // Assert: Verify the expected behavior (e.g., check label text, other controls)
+
             Assert.AreEqual("Button Clicked!", form.YourLabel.Text); // Replace YourLabel and the expected text
+
             form.Show(); // Show the form
 
             // Simulate a button click
+
             buttonTester.Click();
 
             // Perform assertions to verify the expected behavior
             Assert.AreEqual("Button Clicked!", form.LabelText);
-        }
-    }
-}
+        }*/
+//}

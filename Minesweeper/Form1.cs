@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static Minesweeper.Form1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+using ClassLibraryMineSweeper;
 
 namespace Minesweeper
 {
@@ -87,37 +88,11 @@ namespace Minesweeper
             {
                 detectorFinished = newdetectorFinished;
             }
-       /*   public int PlaceFlag(int bombs, int placedFlags)
-            {
-                if (flag == true)
-                {
-                    flag = false;
-                    button.BackColor = Color.Gray;
-                    button.Image = null;
-                    placedFlags--;
-                }
-                else
-                {
-                    if (placedFlags < bombs)
-                    {
-                        flag = true;
-                        button.BackColor = Color.White;
-                        Image originalImage = Properties.Resources.flag;
-                        Image resizedImage = originalImage.GetThumbnailImage(button.Width, button.Height, null, IntPtr.Zero);
-                        button.Image = resizedImage;
-                        placedFlags++;
-                    }
-                }
-                if (placedFlags < 0)
-                {
-                    throw new NotImplementedException();
-                }
-                return placedFlags;
-            }*/
         }
+
         Tile[,] Board;
         int length;
-        (int, int)[] directions = { (-1,-1), (-1, 0), (-1, 1), 
+        (int, int)[] directions = { (-1,-1), (-1, 0), (-1, 1),
                                     ( 0,-1),/*(0, 0)*/( 0, 1),
                                     ( 1,-1), ( 1, 0), ( 1, 1)}; //Used for checking neighbouring tiles 
         State currentstate = State.Detector;        //   List<Button> buttons = new List<Button>();
@@ -128,7 +103,7 @@ namespace Minesweeper
         public Form1()
         {
             InitializeComponent();
-            BombNumber.Maximum=tileNumber.Value* tileNumber.Value; //Limit so there cant be more Bombs than tiles
+            BombNumber.Maximum = tileNumber.Value * tileNumber.Value; //Limit so there cant be more Bombs than tiles
 
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -228,20 +203,26 @@ namespace Minesweeper
             Board = new Tile[length, length];
             placedFlags = 0;
             Bombs = Convert.ToInt32(BombNumber.Value);
-            Form1.Width = 649 +length*25;   // Set the width to 800 pixels
-            Form1.Height = 500 + length * 10;
+            // Form1.Width = 649 + length * 25 ;   // Set the width to 800 pixels
+            // Form1.Height = 500 + length * 10;
+            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);
+            Form1.Height = ClassLibraryMineSweeper.Functions.AppHeight(length);
+            int loci;
+            int locj;
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
                     Tile newbutton = new Tile();
-                    newbutton.Getbutton().Location = new Point(30 + 30 * j, 30 + 30 * i);
+                    loci= ClassLibraryMineSweeper.Functions.ButtonLocationi(i);
+                    locj = ClassLibraryMineSweeper.Functions.ButtonLocationj(j);
+                    newbutton.Getbutton().Location = new Point(locj, loci);
                     newbutton.Getbutton().BackColor = Color.Gray;
                     newbutton.Getbutton().Size = new Size(30, 30);
                     newbutton.Getbutton().Visible = true;
                     newbutton.Getbutton().BringToFront();
                     newbutton.Getbutton().Name = i + "" + j;
-                    newbutton.Getbutton().Font=new Font(newbutton.Getbutton().Font.FontFamily, 16, FontStyle.Bold);
+                    newbutton.Getbutton().Font = new Font(newbutton.Getbutton().Font.FontFamily, 16, FontStyle.Bold);
                     newbutton.Getbutton().Click += UniversalButtonClickHandler;
                     this.Controls.Add(newbutton.Getbutton());
                     Board[i, j] = newbutton;
@@ -250,23 +231,24 @@ namespace Minesweeper
                 }
 
             }
-            BombsLeftCounter.Text = "Bombs Left: "+ BombNumber.Value;
-            placeBombs();  
-            writeDetection(); 
+            BombsLeftCounter.Text = "Bombs Left: " + BombNumber.Value;
+            placeBombs();
+            writeDetection();
         }
+
         public Tile FindButton(Button clickedButton) //searches which button was pressed in Board
         {
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
-                    if (Board[i,j].Getbutton() == clickedButton)
+                    if (Board[i, j].Getbutton() == clickedButton)
                     {
-                        return Board[i,j];
+                        return Board[i, j];
                     }
                 }
             }
-            return Board[0,0];
+            return Board[0, 0];
         }
         public void PlaceFlag(Tile ourtile)
         {
@@ -289,10 +271,6 @@ namespace Minesweeper
                     placedFlags++;
                 }
             }
-         /*   if(placedFlags<0)
-            {
-                throw new NotImplementedException();
-            }*/
             BombsLeftCounter.Text = "Bombs Left: " + (Bombs - placedFlags);
         }
 
@@ -370,8 +348,8 @@ namespace Minesweeper
         private void UniversalButtonClickHandler(object sender, EventArgs e) //Managing button presses in Board
         {
             Button clickedButton = (Button)sender;
-            Tile ourtile=FindButton(clickedButton);
-            
+            Tile ourtile = FindButton(clickedButton);
+
             if (currentstate == State.Detector)
             {
                 if (ourtile.Getflag() == false)//Just to make sure it doesnt accidently land on suspected tile
@@ -399,21 +377,21 @@ namespace Minesweeper
             }
 
         }
- 
+
         private void switchState_Click(object sender, EventArgs e)
         {
             Button clickedButton = (Button)sender;
-            if (currentstate==State.Detector)
+            if (currentstate == State.Detector)
             {
                 currentstate = State.Flag;
-                clickedButton.Text ="Switch to Detector";
+                clickedButton.Text = "Switch to Detector";
                 stateShower.Text = "Current State: Flags";
                 clickedButton.BackColor = Color.Red;
 
             }
             else
             {
-                currentstate=State.Detector;
+                currentstate = State.Detector;
                 clickedButton.Text = "Switch to Flags";
                 stateShower.Text = "Current State: Detector";
                 clickedButton.BackColor = Color.Green;
@@ -422,7 +400,7 @@ namespace Minesweeper
 
         private void tileNumber_ValueChanged(object sender, EventArgs e)
         {
-            BombNumber.Maximum = tileNumber.Value* tileNumber.Value;
+            BombNumber.Maximum = tileNumber.Value * tileNumber.Value;
         }
 
         private void PresetEasy_Click(object sender, EventArgs e)
@@ -456,7 +434,7 @@ namespace Minesweeper
             {
                 for (int j = 0; j < length; j++)
                 {
-                    if (Board[i, j].Getrevealed() == true && Board[i,j].Getdetected()>0 && Board[i, j].GetdetectorFinished()==false)
+                    if (Board[i, j].Getrevealed() == true && Board[i, j].Getdetected() > 0 && Board[i, j].GetdetectorFinished() == false)
                     {
                         if (DetectorDetectBombs(Board[i, j]))
                         {
@@ -471,18 +449,18 @@ namespace Minesweeper
         {
             int numBombs = t.Getdetected();
             int found = 0;
-            (int, int) ij=t.Getcoordinates();
+            (int, int) ij = t.Getcoordinates();
             foreach ((int, int) dir in directions)
             {
                 if (ij.Item1 + dir.Item1 < length && ij.Item1 + dir.Item1 > -1 && ij.Item2 + dir.Item2 < length && ij.Item2 + dir.Item2 > -1) //Checks for boundries
                 {
-                    if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed()==false)
+                    if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed() == false)
                     {
                         found++;
                     }
                 }
             }
-            if(found==numBombs)
+            if (found == numBombs)
             {
                 return true;
             }
@@ -499,8 +477,10 @@ namespace Minesweeper
                     if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed() == false)
                     {
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().BackColor = Color.White;
-                        Image originalImage = Properties.Resources.flag_mark;
-                        Image resizedImage = originalImage.GetThumbnailImage (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,  Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Height, null, IntPtr.Zero);
+                         Image originalImage = Properties.Resources.flag_mark;
+                        Image resizedImage = originalImage.GetThumbnailImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width, Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Height, null, IntPtr.Zero);
+
+                        // Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = ResizeImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,Properties.Resources.flag_mark);
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = resizedImage;
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Setflag(true);
                     }
@@ -514,9 +494,9 @@ namespace Minesweeper
                 for (int j = 0; j < length; j++)
                 {
 
-                    if (Board[i, j].Getrevealed() == true && Board[i,j].Getdetected()>0 && Board[i, j].GetdetectorFinished() == false)
+                    if (Board[i, j].Getrevealed() == true && Board[i, j].Getdetected() > 0 && Board[i, j].GetdetectorFinished() == false)
                     {
-                        DetectorMarkSaveSearchTile(Board[i,j]);
+                        DetectorMarkSaveSearchTile(Board[i, j]);
                     }
                 }
             }
@@ -530,7 +510,7 @@ namespace Minesweeper
             {
                 if (ij.Item1 + dir.Item1 < length && ij.Item1 + dir.Item1 > -1 && ij.Item2 + dir.Item2 < length && ij.Item2 + dir.Item2 > -1) //Checks for boundries
                 {
-                    if ( Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image!=null)
+                    if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image != null)
                     {
                         found++;
                     }
