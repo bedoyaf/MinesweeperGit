@@ -203,9 +203,9 @@ namespace Minesweeper
             Board = new Tile[length, length];
             placedFlags = 0;
             Bombs = Convert.ToInt32(BombNumber.Value);
-            // Form1.Width = 649 + length * 25 ;   // Set the width to 800 pixels
+            // Form1.Width = 649 + length * 25 ;   
             // Form1.Height = 500 + length * 10;
-            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);
+            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);     // Set the width to 800 pixels
             Form1.Height = ClassLibraryMineSweeper.Functions.AppHeight(length);
             int loci;
             int locj;
@@ -214,7 +214,7 @@ namespace Minesweeper
                 for (int j = 0; j < length; j++)
                 {
                     Tile newbutton = new Tile();
-                    loci= ClassLibraryMineSweeper.Functions.ButtonLocationi(i);
+                    loci = ClassLibraryMineSweeper.Functions.ButtonLocationi(i);
                     locj = ClassLibraryMineSweeper.Functions.ButtonLocationj(j);
                     newbutton.Getbutton().Location = new Point(locj, loci);
                     newbutton.Getbutton().BackColor = Color.Gray;
@@ -477,7 +477,7 @@ namespace Minesweeper
                     if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed() == false)
                     {
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().BackColor = Color.White;
-                         Image originalImage = Properties.Resources.flag_mark;
+                        Image originalImage = Properties.Resources.flag_mark;
                         Image resizedImage = originalImage.GetThumbnailImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width, Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Height, null, IntPtr.Zero);
 
                         // Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = ResizeImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,Properties.Resources.flag_mark);
