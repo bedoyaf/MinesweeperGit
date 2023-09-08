@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*Minesweeper*/
+/*Filip Bedoya, 1. ročník*/
+/*letní semestr 2023*/
+/*Programování 2 NPRG031*/
+
+
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
