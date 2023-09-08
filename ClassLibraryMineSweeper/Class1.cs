@@ -19,7 +19,7 @@ using System.Drawing;
 
 namespace ClassLibraryMineSweeper
 {
-    public static class Functions
+    public static class Functions     //Some simple functions for Unit test purposes
     {
         public static int AppWidth(int length)
         {

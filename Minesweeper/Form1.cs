@@ -34,7 +34,7 @@ namespace Minesweeper
             private Button button = new Button();
             private Items contains = Items.None;
             private bool revealed = false;
-            private int detected = 0;
+            private int detected = 0;               //number of bombs around the tile
             private (int, int) coordinates;
             private bool flag = false;
             private bool detectorFinished = false;
@@ -315,7 +315,7 @@ namespace Minesweeper
             }
         }
 
-        public void revealAll() //Game over reveal of the Board
+        public void revealAll() //Game over reveal of all of the Board
         {
             for (int i = 0; i < length; i++)
             {
@@ -401,7 +401,7 @@ namespace Minesweeper
             }
         }
 
-        private void tileNumber_ValueChanged(object sender, EventArgs e)
+        private void tileNumber_ValueChanged(object sender, EventArgs e) //makes sure there arent more Bombs in BombNumber than tiles
         {
             BombNumber.Maximum = tileNumber.Value * tileNumber.Value;
         }
@@ -447,7 +447,7 @@ namespace Minesweeper
                     }
                 }
             }
-            DetectorMarkSaveSweep();
+            DetectorMarkSafeSweep();
         }
 
         public bool DetectorDetectBombs(Tile t) //Counts if unrevealed tiles match the number on the tile(tile.detected)
@@ -494,7 +494,7 @@ namespace Minesweeper
             }
         }
 
-        public void DetectorMarkSaveSweep() //Check for obvious revealable tiles by sweeping the Board
+        public void DetectorMarkSafeSweep() //Check for obvious revealable tiles by sweeping the Board
         {
             for (int i = 0; i < length; i++)
             {
@@ -502,13 +502,13 @@ namespace Minesweeper
                 {
                     if (Board[i, j].Getrevealed() == true && Board[i, j].Getdetected() > 0 && Board[i, j].GetdetectorFinished() == false)
                     {
-                        DetectorMarkSaveSearchTile(Board[i, j]);
+                        DetectorMarkSafeSearchTile(Board[i, j]);
                     }
                 }
             }
         }
 
-        public void DetectorMarkSaveSearchTile(Tile t) //Counts the bombs in neighbouring tiles
+        public void DetectorMarkSafeSearchTile(Tile t) //Counts the bombs in neighbouring tiles
         {
             int numBombs = t.Getdetected();
             int found = 0;
@@ -525,11 +525,11 @@ namespace Minesweeper
             }
             if (found == numBombs)
             {
-                DetectorMarkSaveTiles(t);
+                DetectorMarkSafeTiles(t);
             }
         }
 
-        public void DetectorMarkSaveTiles(Tile t)  //Marks the found save tiles
+        public void DetectorMarkSafeTiles(Tile t)  //Marks the found save tiles
         {
             int numBombs = t.Getdetected();
             int found = 0;
