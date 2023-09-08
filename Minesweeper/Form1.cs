@@ -22,11 +22,13 @@ namespace Minesweeper
             None,
             Bomb,
         }
+
         public enum State  //determins if the player places flags or reveales tiles
         {
             Detector,
             Flag
         }
+
         public class Tile //Main class that contains all the game information for a tile in Minesweeper grid
         {
             private Button button = new Button();
@@ -100,12 +102,14 @@ namespace Minesweeper
         bool start = true;
         int revealedTiles;
         int Bombs;
+
         public Form1()
         {
             InitializeComponent();
             BombNumber.Maximum = tileNumber.Value * tileNumber.Value; //Limit so there cant be more Bombs than tiles
 
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             tileGenerator.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -128,6 +132,7 @@ namespace Minesweeper
         {
             generateBoard(this);
         }
+
         public void ClearButtons() //Deletes all buttons for regenerating the board
         {
             if (start == false)
@@ -145,6 +150,7 @@ namespace Minesweeper
                 start = false;
             }
         }
+
         public void placeBombs()//Determins which tiles contain bombs
         {
             Items item;
@@ -166,6 +172,7 @@ namespace Minesweeper
                 }
             }
         }
+
         public int mineDetector(int i, int j) //Counts neighbouring bombs
         {
             int num = 0;
@@ -181,6 +188,7 @@ namespace Minesweeper
             }
             return num;
         }
+
         public void writeDetection() //Writes number of neigbouring Bombs on the button
         {
             for (int i = 0; i < length; i++)
@@ -194,22 +202,22 @@ namespace Minesweeper
                 }
             }
         }
+
         public void generateBoard(Form Form1)
         {
-            victory.Text = "";
+            victory.Text = "";  //reseting
             ClearButtons();
-            length = Convert.ToInt32(tileNumber.Value);
+            placedFlags = 0;
+
+            length = Convert.ToInt32(tileNumber.Value);                         //building new board
             revealedTiles = length * length - Convert.ToInt32(BombNumber.Value);
             Board = new Tile[length, length];
-            placedFlags = 0;
             Bombs = Convert.ToInt32(BombNumber.Value);
-            // Form1.Width = 649 + length * 25 ;   
-            // Form1.Height = 500 + length * 10;
-            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);   
+            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);   //for Window scaling
             Form1.Height = ClassLibraryMineSweeper.Functions.AppHeight(length);
             int loci;
             int locj;
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)  //creating buttons
             {
                 for (int j = 0; j < length; j++)
                 {
@@ -250,6 +258,7 @@ namespace Minesweeper
             }
             return Board[0, 0];
         }
+
         public void PlaceFlag(Tile ourtile)
         {
             if (ourtile.Getflag() == true)
@@ -280,20 +289,19 @@ namespace Minesweeper
             kju.Enqueue((i, j));
             (int, int) current;
             (int, int) temp;
-            while (kju.Count > 0)
+            while (kju.Count > 0)          
             {
                 current = kju.Dequeue();
                 if (Board[current.Item1, current.Item2].Getcontains() != Items.Bomb && Board[current.Item1, current.Item2].Getrevealed() == false)
                 {
                     revealedTiles--;
+                    Board[current.Item1, current.Item2].Getbutton().BackColor = Color.White;
+                    Board[current.Item1, current.Item2].Setrevealed(true);
                     if (Board[current.Item1, current.Item2].Getdetected() != 0)
                     {
                         Board[current.Item1, current.Item2].Getbutton().Text = Convert.ToString(Board[current.Item1, current.Item2].Getdetected());
                     }
-
-                    Board[current.Item1, current.Item2].Getbutton().BackColor = Color.White;
-                    Board[current.Item1, current.Item2].Setrevealed(true);
-                    if (Board[current.Item1, current.Item2].Getdetected() == 0)
+                    else if (Board[current.Item1, current.Item2].Getdetected() == 0) //if its a blank tile it adds to the queue
                     {
                         temp = current;
                         foreach ((int, int) dir in directions)
@@ -310,6 +318,7 @@ namespace Minesweeper
 
             }
         }
+
         public void revealAll() //Game over reveal of the Board
         {
             for (int i = 0; i < length; i++)
@@ -371,8 +380,6 @@ namespace Minesweeper
             }
             else
             {
-                /*placedFlags=ourtile.PlaceFlag(Convert.ToInt32(BombNumber.Value),placedFlags);
-                BombsLeftCounter.Text = "Bombs Left: " + (Bombs - placedFlags);*/
                 PlaceFlag(ourtile);
             }
 
@@ -403,7 +410,7 @@ namespace Minesweeper
             BombNumber.Maximum = tileNumber.Value * tileNumber.Value;
         }
 
-        private void PresetEasy_Click(object sender, EventArgs e)
+        private void PresetEasy_Click(object sender, EventArgs e) 
         {
             tileNumber.Value = 9;
             BombNumber.Value = 10;
@@ -428,7 +435,8 @@ namespace Minesweeper
         {
             DetectorSweep();
         }
-        public void DetectorSweep()  //Goes through Board searching for obvious bombs
+
+        public void DetectorSweep()  //Goes through Board searching for obvious bombs with DetectorDetectBombs
         {
             for (int i = 0; i < length; i++)
             {
@@ -445,6 +453,7 @@ namespace Minesweeper
             }
             DetectorMarkSaveSweep();
         }
+
         public bool DetectorDetectBombs(Tile t) //Counts if unrevealed tiles match the number on the tile(tile.detected)
         {
             int numBombs = t.Getdetected();
@@ -466,6 +475,7 @@ namespace Minesweeper
             }
             return false;
         }
+
         public void DetectorPaintTiles(Tile t) //Marks the found tiles from the Detector
         {
             int numBombs = t.Getdetected();
@@ -479,8 +489,6 @@ namespace Minesweeper
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().BackColor = Color.White;
                         Image originalImage = Properties.Resources.flag_mark;
                         Image resizedImage = originalImage.GetThumbnailImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width, Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Height, null, IntPtr.Zero);
-
-                        // Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = ResizeImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,Properties.Resources.flag_mark);
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = resizedImage;
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Setflag(true);
                         placedFlags++;
@@ -489,13 +497,13 @@ namespace Minesweeper
                 }
             }
         }
+
         public void DetectorMarkSaveSweep() //Check for obvious revealable tiles by sweeping the Board
         {
             for (int i = 0; i < length; i++)
             {
                 for (int j = 0; j < length; j++)
                 {
-
                     if (Board[i, j].Getrevealed() == true && Board[i, j].Getdetected() > 0 && Board[i, j].GetdetectorFinished() == false)
                     {
                         DetectorMarkSaveSearchTile(Board[i, j]);
@@ -503,6 +511,7 @@ namespace Minesweeper
                 }
             }
         }
+
         public void DetectorMarkSaveSearchTile(Tile t) //Counts the bombs in neighbouring tiles
         {
             int numBombs = t.Getdetected();
@@ -523,6 +532,7 @@ namespace Minesweeper
                 DetectorMarkSaveTiles(t);
             }
         }
+
         public void DetectorMarkSaveTiles(Tile t)  //Marks the found save tiles
         {
             int numBombs = t.Getdetected();
