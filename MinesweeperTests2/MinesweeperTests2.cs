@@ -1,26 +1,13 @@
-//using Minesweeper;
-//using static Minesweeper.Form1;
 using System.Drawing;
 using System.Reflection;
 using System.Windows;
 using Xunit;
 using ClassLibraryMineSweeper;
+
 namespace MinesweeperTests2
 {
     public class MinesweeperTests2
     {
-        [Fact]
-        public void YourTestMethod()
-        {
-            // Arrange: Prepare your test data and objects
-            int expected = 42;
-            int actual = 42;
-
-            // Act: Execute the method to be tested
-
-            // Assert: Verify the expected results
-            Assert.Equal(expected, actual);
-        }
         [Fact]
         public void CheckAppHeight()
         {

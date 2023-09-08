@@ -27,7 +27,7 @@ namespace Minesweeper
             Detector,
             Flag
         }
-        public class Tile
+        public class Tile //Main class that contains all the game information for a tile in Minesweeper grid
         {
             private Button button = new Button();
             private Items contains = Items.None;
@@ -95,7 +95,7 @@ namespace Minesweeper
         (int, int)[] directions = { (-1,-1), (-1, 0), (-1, 1),
                                     ( 0,-1),/*(0, 0)*/( 0, 1),
                                     ( 1,-1), ( 1, 0), ( 1, 1)}; //Used for checking neighbouring tiles 
-        State currentstate = State.Detector;        //   List<Button> buttons = new List<Button>();
+        State currentstate = State.Detector;        
         int placedFlags = 0;
         bool start = true;
         int revealedTiles;
@@ -205,7 +205,7 @@ namespace Minesweeper
             Bombs = Convert.ToInt32(BombNumber.Value);
             // Form1.Width = 649 + length * 25 ;   
             // Form1.Height = 500 + length * 10;
-            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);     // Set the width to 800 pixels
+            Form1.Width = ClassLibraryMineSweeper.Functions.AppWidth(length);   
             Form1.Height = ClassLibraryMineSweeper.Functions.AppHeight(length);
             int loci;
             int locj;
@@ -474,7 +474,7 @@ namespace Minesweeper
             {
                 if (ij.Item1 + dir.Item1 < length && ij.Item1 + dir.Item1 > -1 && ij.Item2 + dir.Item2 < length && ij.Item2 + dir.Item2 > -1) //Checks for boundries
                 {
-                    if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed() == false)
+                    if (Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getrevealed() == false && Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getflag()==false)
                     {
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().BackColor = Color.White;
                         Image originalImage = Properties.Resources.flag_mark;
@@ -483,6 +483,8 @@ namespace Minesweeper
                         // Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = ResizeImage(Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Width,Properties.Resources.flag_mark);
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Getbutton().Image = resizedImage;
                         Board[ij.Item1 + dir.Item1, ij.Item2 + dir.Item2].Setflag(true);
+                        placedFlags++;
+                        BombsLeftCounter.Text = "Bombs Left: " + (Bombs - placedFlags);
                     }
                 }
             }
